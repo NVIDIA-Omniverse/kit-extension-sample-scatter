@@ -1,6 +1,6 @@
 ## A simple scatter tool
 
-![Object Info](exts/omni.example.ui_window/data/preview.png)
+![Object Info](exts/omni.example.ui_scatter_tool/data/preview.png)
 
 ## Adding the extension
 
