@@ -77,85 +77,24 @@ class ScatterWindow(ui.Window):
             prim_names = get_selection()
 
         if not prim_names:
-            # TODO: "Can't clone" message
             pass
-
-        transforms = scatter(
-            count=[m.as_int for m in self._scatter_count_models],
-            distance=[m.as_float for m in self._scatter_distance_models],
-            randomization=[m.as_float for m in self._scatter_random_models],
-            id_count=len(prim_names),
-            seed=self._scatter_seed_model.as_int,
-        )
-
-        duplicate_prims(
-            transforms=transforms,
-            prim_names=prim_names,
-            target_path=self._scatter_prim_model.as_string,
-            mode=self._scatter_type_model.get_current_item().as_string,
-        )
 
     def _build_source(self):
         """Build the widgets of the "Source" group"""
-        with ui.CollapsableFrame("Source", name="group"):
-            with ui.VStack(height=0, spacing=SPACING):
-                with ui.HStack():
-                    ui.Label("Prim", name="attribute_name", width=self.label_width)
-                    ui.StringField(model=self._source_prim_model)
-                    # Button that puts the selection to the string field
-                    ui.Button(
-                        " S ",
-                        width=0,
-                        height=0,
-                        style={"margin": 0},
-                        clicked_fn=self._on_get_selection,
-                        tooltip="Get From Selection",
-                    )
+        pass
 
     def _build_scatter(self):
         """Build the widgets of the "Scatter" group"""
-        with ui.CollapsableFrame("Scatter", name="group"):
-            with ui.VStack(height=0, spacing=SPACING):
-                with ui.HStack():
-                    ui.Label("Prim Path", name="attribute_name", width=self.label_width)
-                    ui.StringField(model=self._scatter_prim_model)
-
-                with ui.HStack():
-                    ui.Label("Prim Type", name="attribute_name", width=self.label_width)
-                    ui.ComboBox(self._scatter_type_model)
-
-                with ui.HStack():
-                    ui.Label("Seed", name="attribute_name", width=self.label_width)
-                    ui.IntDrag(model=self._scatter_seed_model, min=0, max=10000)
+        pass
 
     def _build_axis(self, axis_id, axis_name):
         """Build the widgets of the "X" or "Y" or "Z" group"""
-        with ui.CollapsableFrame(axis_name, name="group"):
-            with ui.VStack(height=0, spacing=SPACING):
-                with ui.HStack():
-                    ui.Label("Object Count", name="attribute_name", width=self.label_width)
-                    ui.IntDrag(model=self._scatter_count_models[axis_id], min=1, max=100)
-
-                with ui.HStack():
-                    ui.Label("Distance", name="attribute_name", width=self.label_width)
-                    ui.FloatDrag(self._scatter_distance_models[axis_id], min=0, max=10000)
-
-                with ui.HStack():
-                    ui.Label("Random", name="attribute_name", width=self.label_width)
-                    ui.FloatDrag(self._scatter_random_models[axis_id], min=0, max=10000)
-
+        pass
+   
     def _build_fn(self):
         """
         The method that is called to build all the UI once the window is
         visible.
         """
-        with ui.ScrollingFrame():
-            with ui.VStack(height=0):
-                self._build_source()
-                self._build_scatter()
-                self._build_axis(0, "X Axis")
-                self._build_axis(1, "Y Axis")
-                self._build_axis(2, "Z Axis")
+        pass
 
-                # The Go button
-                ui.Button("Scatter", clicked_fn=self._on_scatter)
