@@ -12,7 +12,7 @@ In this guide, we will be providing you with the steps you need to create a scat
 -  Apply USD API to set up PointInstancer
 - When to use undo function
 
-# Prereqs.
+# Prerequisites
 
 It is recomemended to understand the concepts in this guide that you have completed the folllowing:
 
