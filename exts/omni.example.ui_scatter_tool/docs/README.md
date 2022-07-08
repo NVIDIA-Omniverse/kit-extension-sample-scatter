@@ -18,6 +18,12 @@ In the tutorial you will learn how to build off exisitng modules using `Omnivers
 
 Once the extension is enabled in the `Extension Manager` the `Scatter Window` will appear. You may dock this window or keep it floating in the console. Select your primitive in the hierarchy that you want to scatter and then click the `S` button next to the `Source > Prim` pathway to set the selected primitive. Then, set your `Scatter Properties` and click the `Scatter` button.
 
+## Adding the extension
+
+To add a those extensions to your Omniverse app:
+1. Go into: Extension Manager -> Gear Icon -> Extension Search Path
+2. Add this as a search path: `git://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter?branch=main&dir=exts`
+
 
 ## Contributing
 The source code for this repository is provided as-is and we are not accepting outside contributions.
