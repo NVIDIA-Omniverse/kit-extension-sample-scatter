@@ -2,18 +2,18 @@
 
 # How to Create a Scatter Tool 
 
-In this guide, we will be providing you with the steps you need to create a scatter tool that can randomize primitives' around the World space. You will create a tool that can scatter on X, Y, and Z axis by the amount of objects, their distance, and their random count. This guide is well suited for intermediate engineers. 
+In this guide, we will be providing you with the steps you need to create a scatter tool that can randomize prims around the world space. You will create a tool that can scatter on X, Y, and Z axis by the amount of objects, their distance, and their random count. This guide is well suited for intermediate engineers. 
 
 # Learning Objects
 
 - How to use Omniverse UI Framework
 - Add Extension from Local Path
 - Set Scatter Properties
--  Analyze Random Number Generator
--  Apply USD API to set up PointInstancer
+- Analyze Random Number Generator
+- Apply USD API to set up PointInstancer
 - When to use undo function
 
-# Prereqs.
+# Prerequisites
 
 It is recomemended to understand the concepts in this guide that you have completed the folllowing:
 
@@ -21,57 +21,68 @@ It is recomemended to understand the concepts in this guide that you have comple
 - [Extension Environment Tutorial](https://github.com/NVIDIA-Omniverse/ExtensionEnvironmentTutorial)
 - [Spawn Prims Extension Tutorial](https://github.com/NVIDIA-Omniverse/kit-extension-sample-spawn-prims)
 
-# Table of Contents
 
--   [Step 1: Download the Starter Project ](#step-1-download-the-starter-project)
-    - [Step 1.1: Add Extension from Local Path](#step-11-add-extension-from-local-path)
--   [Step 2: Build the UI](#step-2-build-the-ui)
-    - [Step 2.1: Build Source Function](#step-21-build-source-function)
-    - [Step 2.2: Build Scatter Function ](#step-22-build-scatter-function)
-    - [Step 2.3: Build Axis Function ](#step-23-build-axis-function)
-    - [Step 2.4: Build Function ](#step-24-build-function)
-- [Step 3: On Scatter Function](#step-3-on-scatter-function)
-- [Step 4: (Optional) scatter.py](#step-4-optional-scatterpy)
-- [Step 5: (Optional) command.py](#step-5-optional-commandpy)
-- [Conclusion](#this-completes-the-scatter-tool-guide-you-now-have-a-working-scatter-tool-and-understanding-of-the-ui-framework-scatter-properties-and-the-modules-within-the-scatter-tool)
+## Step 1: Install the Starter Project Extension
 
+In this section you download the project and install the extension
 
-# Step 1: Download the Starter Project
+### Step 1.1: Download The Scatter Project
 
-To get the assets for this hands-on-lab, please clone the `tutorial-start` branch of `kit-extension-sample-scatter` [github repository](https://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter)
+ Clone the `tutorial-start` branch of `kit-extension-sample-scatter` [github repository](https://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter):
+
+```bash
+git clone -b tutorial-start https://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter
+```
+
+This repository contains the assets in this tutorial 
 
 
-## Step 1.1: Add Extension from Local Path
 
-Let's now import the extension into the `Extension Manager` in `Omniverse Code` by adding the local path of the `tutorial-start` branch you cloned from the [github repository](https://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter)
+### Step 1.2 Open the Extensions Tab
 
-Navigate to `Omniverse Code` and find the `Extensions` tab. If it is not there, you can make sure it is checked in Window > Extensions.
 
-In the `Extensions` tab, you will see a gear icon - select this icon to open `Extensions Search Paths`. Locate the <span style="color:green"> green </span> :heavy_plus_sign: icon at the bottom right of that console to add a new path. Then copy/paste the local path of the `exts` folder from `tutorial-start` branch, as so: 
+In Omniverse Code, click the _Extensions_ tab:
+
+![](./Images/ExtensionsTab.PNG)
+
+
+If it's not there, make sure it's checked in **Window > Extensions**.
+
+![](./Images/WindowMenuExt.PNG)
+
+
+
+### Step 1.3: Add Extension From Local Path
+
+In the *Extensions* tab, click the **gear icon** to open *Extension Search Path*. Then, click the **green plus** icon to add a new path. Finally, copy and paste the local path of the `exts` folder from the  `tutorial-start` branch: 
 
 ![](./Images/add_ext.PNG)
 
+Here, you imported the extension into the `Extension Manager` in `Omniverse Code` by adding the local path of the `tutorial-start` branch you cloned from the [github repository](https://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter).
 
->:memo: If you do not see `Scatter Window` pop up after adding the local path, ensure the extension in enabled in the `Extensions Manager`.
+### Step 1.4: Verify the Extension is Active 
 
-# Step 2: Build the UI
+If you don't see `Scatter Window` pop up after adding the local path, ensure the extension in enabled in the `Extensions Manager`.
 
-### Theory
+Type "Scatter" into the search box at the top of the Extensions. Then, if the `slider` is in the left (off) position click it to activate the extension.
 
-We start this guide with a blank `Scatter Window`. In the following steps, you will learn to use `Omniverse UI Framework` to build out the UI for Source, Scatter, and each Axis. 
 
-This step will focus on the `window.py` file found in the `exts/omni.example.ui_scatter_tool/omni/example/ui_scatter_tool/` directory. To learn more about the other files in the respository, please refer to [How to Make an Extension by Spawning Primitives](https://github.com/NVIDIA-Omniverse/kit-extension-sample-spawn-prims/blob/main/exts/omni.example.spawnPrims/tutorial/Spawn_PrimsTutorial.md).
+![](./Images/EnableExtensionSmall.PNG)
+
+## Step 2: Build the UI   
+
+This guide starts with a blank `Scatter Window`. In the following steps, you will learn to use `Omniverse UI Framework` to build the UI for **Source**, **Scatter**, and each **Axis**. 
+
+This step will focus on the `window.py` file found in the `exts/omni.example.ui_scatter_tool/omni/example/ui_scatter_tool/` directory. To learn more about the other files in the respository, refer to [How to Make an Extension by Spawning Primitives](https://github.com/NVIDIA-Omniverse/kit-extension-sample-spawn-prims/blob/main/exts/omni.example.spawnPrims/tutorial/Spawn_PrimsTutorial.md).
 
 
 By the end of Step 2, your `Scatter Window` UI will be built out.
 
-## Step 2.1: Build Source Function
+### Step 2.1: Build Source Function
 
-### Theory
+To begin the scatter tool UI, you will start by picking the source of the prim to be scattered. 
 
-To begin the scatter tool UI, we will start by slotting the source of the primitive that we intend to scatter. 
-
-For this step, we will be taking a look at `_build_source` function. Currently, it should look like this:
+For this step, look at the `_build_source` function. Currently, it should look like this:
 
 ```python
 def _build_source(self):
@@ -79,9 +90,9 @@ def _build_source(self):
     pass
 ```
 
-The objective of this function is create a place to display the source path of the primitive.  
+The objective of this function is create a place to display the source path of the prim.  
 
-We will start setting up this by using the `Omniverse UI Framework` ([click here for more information](https://docs.omniverse.nvidia.com/py/kit/source/extensions/omni.ui/docs/index.html)) to create a `Collapsable Frame`. 
+Set this up by using the `Omniverse UI Framework` ([click here for more information](https://docs.omniverse.nvidia.com/py/kit/source/extensions/omni.ui/docs/index.html)) to create a `Collapsable Frame`. 
 
 ```python
     def _build_source(self):
@@ -90,7 +101,7 @@ We will start setting up this by using the `Omniverse UI Framework` ([click here
         with ui.CollapsableFrame("Source", name="group"):
 ```
 
-Then, we will use `VStack` to create the column and `HStack` to create a row.
+Then, use a `VStack` to create the column and an `HStack` to create a row.
 
 ```python
     def _build_source(self):
@@ -103,7 +114,7 @@ Then, we will use `VStack` to create the column and `HStack` to create a row.
                 with ui.HStack():
 ```
 
-Next, let's create a `Label` to give a name for the field.
+Next, create a `Label` to name the field.
 
 ```python
     def _build_source(self):
@@ -119,7 +130,7 @@ Next, let's create a `Label` to give a name for the field.
                     ui.StringField(model=self._source_prim_model)
 ```
 
-Finally, we will add a button to give a selection to the string field.
+Finally, add a button to give a selection to the string field.
 
 ```python
     def _build_source(self):
@@ -142,15 +153,12 @@ Finally, we will add a button to give a selection to the string field.
                     )
 ```
 
-Don't worry if you do not see your changes in the `Scatter Window`, the UI will be built all together at the end of Step 1 in `build_fn`.
+Don't worry if you do not see your changes in the `Scatter Window`, the UI will be fully constructed at the end of Step 2 in `build_fn`.
 
-## Step 2.2: Build Scatter Function
+### Step 2.2: Build the Scatter Function:
+In this step you will use the `Omniverse UI Framework` to create the `Prim Path` and `Prim Type`. 
 
-### Theory
-
-  In this section, we will use the `Omniverse UI Framework` to create the `Prim Path` and `Prim Type`. 
-
-  Let's move further down `window.py` to `_build_scatter` function, which currently looks like this:
+Move further down `window.py` to `_build_scatter` function, which currently looks like this:
 
   ```python
     def _build_scatter(self):
@@ -158,7 +166,7 @@ Don't worry if you do not see your changes in the `Scatter Window`, the UI will 
         pass
   ```
 
-  Just as we did in the previous step, we will build out the UI using Collapsable Frame:
+Just as you did in the previous step, create the UI using `CollapsableFrame`:
 
   ```python
     def _build_scatter(self):
@@ -166,7 +174,7 @@ Don't worry if you do not see your changes in the `Scatter Window`, the UI will 
         with ui.CollapsableFrame("Scatter", name="group"):
   ```
 
-  Then create one column that will nest 3 rows. Within these rows we will create a `Label`, one for `Prim Path`, `Path Type`, and `Seed`.
+  Then, create one column that will nest 3 rows. Within these rows you will create a `Label`, one for `Prim Path`, `Path Type`, and `Seed`.
 
   ```python
     def _build_scatter(self):
@@ -190,13 +198,11 @@ Don't worry if you do not see your changes in the `Scatter Window`, the UI will 
                     ui.IntDrag(model=self._scatter_seed_model, min=0, max=10000)
   ```
   
-  ## Step 2.3: Build Axis Function
+  ### Step 2.3: Build Axis Function
+ 
+The final function for the `Scatter Window` will build the UI needed to set the parameters of scatter on the X, Y, and Z Axis.
 
-  ### Theory
-
-  As for our last function before we build everything together in the `Scatter Window`, we will build the UI needed to set the parameters of scatter on the X, Y, and Z Axis.
-
-  Let's take a look at `_build_axis` function, which looks like this currently:
+Take a look at the `_build_axis` function, which looks like this currently:
 
   ```python
     def _build_axis(self, axis_id, axis_name):
@@ -204,10 +210,9 @@ Don't worry if you do not see your changes in the `Scatter Window`, the UI will 
         pass
   ```
 
-  We will use the `UI Framework` for this function as well, following the same structure as `_build_scatter` with a Collapsable Frame, one column, and 3 rows. Our rows will each have a `Label` for Object Count, Distance, and Random.
+ The `UI Framework` will be used for this function as well, following the same structure as `_build_scatter` with a Collapsable Frame, one column, and 3 rows. Each row will have a `Label` for Object Count, Distance, and Random.
  
-
-  We only need to build this one because we will use this framework to be called for each axis later on.
+You only need this one function since it will be reused for each axis later on.
 
   ```python
     def _build_axis(self, axis_id, axis_name):
@@ -232,13 +237,12 @@ Don't worry if you do not see your changes in the `Scatter Window`, the UI will 
 
   ```
 
-  ## Step 2.4: Build Function
+### Step 2.4: Build Function
+ 
 
-  ### Theory
+Now that you have the `UI Framework` for `Scatter Window`, you will use the `_build_fn` to call the functions to construct the UI elements for **source**, **scatter**, and our **X**, **Y**, and **Z** Axis.
 
-Now that we have the `UI Framework` built for `Scatter Window`, we will use the `_build_fn` to call source, scatter, and our X, Y, and Z Axis.
-
-Currently, our `_build_fn` looks like this:
+Currently, the `_build_fn` looks like this:
 
 ```python
     def _build_fn(self):
@@ -249,11 +253,11 @@ Currently, our `_build_fn` looks like this:
         pass
 ```
 
-We will house each function in a `ScrollingFrame` and nest it in one column. 
+A `ScrollingFrame` will contain each function and nest it in one column. 
 
-Notice that when calling for the Axis UI, we call `_build_axis` three times and identify which Axis it will represent. 
+Notice that `_build_axis` is called three times with arguments to identify which Axis it will represent. 
 
-After the frame is built, we will add a button. This will be our `GO` button to start the Scatter. 
+After the frame is built, add a `GO` button to start the Scatter. 
 
 ```python
     def _build_fn(self):
@@ -282,11 +286,12 @@ You have created the UI Framework for `Scatter Window`!
 
 ![](./Images/ScatterWindowUIComplete.PNG)
 
-## Step 3: On Scatter Function
 
-### Theory
 
-In this step, we will add to the function that is called when the `Scatter` button is pressed. 
+
+## Step 3: On Scatter Function 
+
+In this step, you will add to the function that is called when the `Scatter` button is pressed. 
 
 Locate the `_on_scatter` function at line 73 of `window.py`, it will look like this:
 
@@ -301,9 +306,9 @@ Locate the `_on_scatter` function at line 73 of `window.py`, it will look like t
             pass
 ```
 
-We already have the variable `prim_names` defined so now we need to set the `Scatter Properties`. For this guide we have provided you with some arrays and loops for the properties but we encourage and challenge you to experiment with your own as well.
+The variable `prim_names` is already defined so now you need to set the `Scatter Properties`. For this guide we have provided you with some arrays and loops for the properties but you are encouraged to experiment with your own as well.
 
-In addition to the properties of the scatter, we will also set the properties for duplicating the primitive.
+In addition to the properties of the scatter, you will also set the properties for duplicating the prim.
 
 ```python
     def _on_scatter(self):
@@ -333,21 +338,20 @@ In addition to the properties of the scatter, we will also set the properties fo
 
 ## Congratulations!
 
-Now, we when you create a primitive in the Viewport, set it in `Source`, and click `Scatter`, your primitive will scatter using the properties set above.
+Now, after you have created a prim in the `Viewport`, set it in `Source`, and click `Scatter`. Your prim will scatter using the properties set above.
 
 ![](./Images/scatterClicked.gif)
 
-# Step 4: (Optional) scatter.py
+## Step 4: (Optional) scatter.py
 
->:memo: This is a review and no code is being added
+> **_NOTE:_** This is a review and no code is being added
+ 
 
-### Theory
+This section will introduce `scatter.py` and briefly showcase its function in the scatter tool.
 
-  For this section we will introduce `scatter.py` and briefly showcase its function in the scatter tool.
+Begin by navigating to `scatter.py` in your `exts` folder hierarchy. 
 
-  Let's begin by navigating to `scatter.py` in your `exts` folder hierarchy. 
-
-  This script is where the `on_scatter` function in `window.py` is pulling it's information from. You will notice the following arguments in `scatter.py`:
+This script is where the `on_scatter` function in `window.py` is pulling its information from. Notice the following arguments in `scatter.py`:
 
 ```python
 def scatter(
@@ -358,7 +362,7 @@ def scatter(
 
 These arguments match up with the properties in `transforms` from the previous step of `on_scatter`.
 
-Below the arguments we have commented a description of each:
+Below the arguments have commented with a description of each:
 
 ```python
     """
@@ -385,7 +389,7 @@ Below the arguments we have commented a description of each:
 """"
 ```
 
-Below this comment is where we initialize the loop to randomly generated sets of points as well as create a matric with position randomization for each axis:
+Below this comment is where the loop is initialized to randomly generated a sets of points as well as create a matrix with position randomization for each axis:
 
 ```python
     # Initialize the random number generator.
@@ -415,15 +419,15 @@ Below this comment is where we initialize the loop to randomly generated sets of
                 yield (result, id)
 ```
 
-`scatter.py` is where you can adjust to create different scatters, such as scatter on the geometry or a scatter that uses texture.
+`scatter.py` is where you can adjust to create different types scatters, such as scatter on the geometry or a scatter that uses texture.
 
 ## Step 5: (Optional) command.py
 
->:memo: This is a review and no code is being added.
+> **_NOTE:_** This is a review and no code is being added.
 
-In this section we will introduce `command.py` and briefly review its importance to the scatter tool.
+This section will introduce `command.py` and briefly review its importance to the scatter tool.
 
-Naviagte to `command.py` in the `exts` folder hierarchy and let's review what's inside. 
+Navigate to `command.py` in the `exts` folder and to review what's inside. 
 
 At the start of the `ScatterCreatePointInstancerCommand` class, you will notice that we have added a comment of the arguments used and a description of each.
 
@@ -444,7 +448,7 @@ At the start of the `ScatterCreatePointInstancerCommand` class, you will notice 
     """
 ```
 
-Below the comment is where we initialize these arguments, set the USD stage, and unzip the list of tuples, as so:
+Below the comment is where these arguments are initialized, sets the USD stage, and unzips the list of tuples:
 
 ```python
     def __init__(
@@ -467,7 +471,7 @@ Below the comment is where we initialize these arguments, set the USD stage, and
         self._prim_names = prim_names.copy()
 ```
 
-Following that we set up the `PointInstancer` Command where we use the USD API to create the geometry and create the points during scatter. 
+Following that, the `PointInstancer` command is set up. This where the USD API is used to create the geometry and create the points during scatter. 
 
 ```python
     def do(self):
@@ -482,7 +486,7 @@ Following that we set up the `PointInstancer` Command where we use the USD API t
         instancer.CreateProtoIndicesAttr().Set(self._proto_indices)
 ```
 
-Finally, we call the `undo` function. This is called when the user undo's the scatter to restore the stage before `Do()`. The reason we use `undo` rather than `execute` is so that undo bypasses the queue of the stage. 
+Finally, the `undo()` function is called. This is called when the user undoes the scatter to restore the stage before `do()`. The reason `undo()` is used rather than `execute()` is so that undo bypasses the queue of the stage. 
 
 ```python
     def undo(self):
@@ -490,4 +494,7 @@ Finally, we call the `undo` function. This is called when the user undo's the sc
         delete_cmd.do()
 ```
 
-## This completes the Scatter Tool guide. You now have a working Scatter Tool and understanding of the UI Framework, Scatter Properties, and the modules within the Scatter Tool.
+
+
+
+### This completes the Scatter Tool guide. You now have a working Scatter Tool and understanding of the UI Framework, Scatter Properties, and the modules within the Scatter Tool.
