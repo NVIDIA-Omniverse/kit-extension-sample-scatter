@@ -7,6 +7,7 @@ In this guide, we will be providing you with the steps you need to create a scat
 # Learning Objects
 
 - How to use Omniverse UI Framework
+- Add Extension from Local Path
 - Set Scatter Properties
 -  Analyze Random Number Generator
 -  Apply USD API to set up PointInstancer
@@ -23,6 +24,7 @@ It is recomemended to understand the concepts in this guide that you have comple
 # Table of Contents
 
 -   [Step 1: Download the Starter Project ](#step-1-download-the-starter-project)
+    - [Step 1.1: Add Extension from Local Path](#step-11-add-extension-from-local-path)
 -   [Step 2: Build the UI](#step-2-build-the-ui)
     - [Step 2.1: Build Source Function](#step-21-build-source-function)
     - [Step 2.2: Build Scatter Function ](#step-22-build-scatter-function)
@@ -38,8 +40,19 @@ It is recomemended to understand the concepts in this guide that you have comple
 
 To get the assets for this hands-on-lab, please clone the `tutorial-start` branch of `kit-extension-sample-scatter` [github repository](https://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter)
 
-`add git clone -b tutorial-start branch`
 
+## Step 1.1: Add Extension from Local Path
+
+Let's now import the extension into the `Extension Manager` in `Omniverse Code` by adding the local path of the `tutorial-start` branch you cloned from the [github repository](https://github.com/NVIDIA-Omniverse/kit-extension-sample-scatter)
+
+Navigate to `Omniverse Code` and find the `Extensions` tab. If it is not there, you can make sure it is checked in Window > Extensions.
+
+In the `Extensions` tab, you will see a gear icon - select this icon to open `Extensions Search Paths`. Locate the <span style="color:green"> green </span> :heavy_plus_sign: icon at the bottom right of that console to add a new path. Then copy/paste the local path of the `exts` folder from `tutorial-start` branch, as so: 
+
+![](./Images/add_ext.PNG)
+
+
+>:memo: If you do not see `Scatter Window` pop up after adding the local path, ensure the extension in enabled in the `Extensions Manager`.
 
 # Step 2: Build the UI
 
@@ -330,7 +343,7 @@ Now, we when you create a primitive in the Viewport, set it in `Source`, and cli
 
 ### Theory
 
-  For this section we will introduce `scatter.py` and briefly showcase its' function in the scatter tool.
+  For this section we will introduce `scatter.py` and briefly showcase its function in the scatter tool.
 
   Let's begin by navigating to `scatter.py` in your `exts` folder hierarchy. 
 
@@ -408,7 +421,7 @@ Below this comment is where we initialize the loop to randomly generated sets of
 
 >:memo: This is a review and no code is being added.
 
-In this section we will introduce `command.py` and briefly review its' importance to the scatter tool.
+In this section we will introduce `command.py` and briefly review its importance to the scatter tool.
 
 Naviagte to `command.py` in the `exts` folder hierarchy and let's review what's inside. 
 
