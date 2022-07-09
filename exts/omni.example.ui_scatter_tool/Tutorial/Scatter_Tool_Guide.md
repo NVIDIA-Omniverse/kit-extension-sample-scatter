@@ -484,7 +484,7 @@ Following that, the `PointInstancer` command is set up. This where the USD API i
         instancer.CreateProtoIndicesAttr().Set(self._proto_indices)
 ```
 
-Finally, the `undo()` function is called. This is called when the user undoes the scatter to restore the prior state of the stage. In this case, the state is restored by simply deleting the PointInstancer. The reason `delete_cmd.do()` is used rather than calling `omni.kit.commands.execute()` is so that the "DeletePrimsCommand" doesn't show up in the Commands History.
+Finally, the `undo()` function is defined. This is called when the user undoes the scatter to restore the prior state of the stage. In this case, the state is restored by simply deleting the PointInstancer. The reason `delete_cmd.do()` is used rather than calling `omni.kit.commands.execute()` is so that the "DeletePrimsCommand" doesn't show up in the Commands History.
 
 ```python
     def undo(self):
